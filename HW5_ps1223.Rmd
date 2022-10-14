@@ -1,0 +1,65 @@
+---
+title: "HW5"
+author: "Parthvi Soni"
+date: "2022-10-13"
+output: html_document
+---
+
+
+```{r}
+
+library(fpp)
+library(fpp2)
+data(Seatbelts)
+head(Seatbelts)
+plot(Seatbelts)
+
+df1 <- ts(Seatbelts[,'DriversKilled'], frequency = 12)
+
+frequency(Seatbelts)
+
+stl_decomp <- stl(df1,s.window ="periodic")
+plot(stl_decomp)
+# from the plot we can note that there is a slight decrease in the drivers deaths
+#due to road casualities in great britain over the time
+
+
+attributes(stl_decomp)
+
+?seasadj
+# Lets print out a seasonal adjustment
+seasadj(stl_decomp)
+
+#Returns seasonally adjusted data constructed by removing the seasonal component
+# from the output we can see that the seasonal component is 1 
+
+
+
+# Plot a line on the graph
+plot(df1)
+lines(seasadj(stl_decomp), col="Red")
+# this plot shows the difference between the original timeseries and the data after seasonal adjustment
+
+
+# Default period forecast
+f_stl <- forecast(stl_decomp)
+
+
+# you can pass the # of period
+f_stl <- forecast(stl_decomp,h=15)
+f_stl
+plot(f_stl)
+
+
+# There is more than one way to do things
+decomp_df1 <- decompose(df1)
+plot(decomp_df1)
+# Each one shows different attributes 
+attributes(decomp_df1)
+seasadj(decomp_df1)
+
+
+
+
+```
+
